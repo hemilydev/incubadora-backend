@@ -52,6 +52,7 @@ public class StartupService {
         startup.setSetor(dadosNovos.getSetor());
         startup.setCiclo(dadosNovos.getCiclo());
         startup.setDescricao(dadosNovos.getDescricao());
+        startup.setDataEntrada(dadosNovos.getDataEntrada());
         startup.setRelatorioEnviado(dadosNovos.isRelatorioEnviado());
 
         return startupRepository.save(startup);
@@ -66,7 +67,7 @@ public class StartupService {
 
     /**
      * Avança a startup para o próximo ciclo.
-     * CICLO1 → CICLO2 → CICLO3 → permanece em CICLO3
+     * CICLO1 → CICLO2 → CICLO3
      */
     public Startup avancarCiclo(Long id) {
         Startup startup = startupRepository.findById(id)
@@ -76,6 +77,23 @@ public class StartupService {
             case "CICLO1" -> startup.setCiclo("CICLO2");
             case "CICLO2" -> startup.setCiclo("CICLO3");
             default -> throw new RuntimeException("Startup já está no ciclo final");
+        }
+
+        return startupRepository.save(startup);
+    }
+
+    /**
+     * Volta a startup para o ciclo anterior.
+     * CICLO3 → CICLO2 → CICLO1
+     */
+    public Startup voltarCiclo(Long id) {
+        Startup startup = startupRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Startup não encontrada"));
+
+        switch (startup.getCiclo()) {
+            case "CICLO3" -> startup.setCiclo("CICLO2");
+            case "CICLO2" -> startup.setCiclo("CICLO1");
+            default -> throw new RuntimeException("Startup já está no ciclo inicial");
         }
 
         return startupRepository.save(startup);
@@ -93,6 +111,21 @@ public class StartupService {
     }
 
     /**
+     * Reativa uma startup desclassificada, voltando para o Ciclo 1.
+     */
+    public Startup reativar(Long id) {
+        Startup startup = startupRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Startup não encontrada"));
+
+        if (!startup.getCiclo().equals("DESCLASSIFICADA")) {
+            throw new RuntimeException("Startup não está desclassificada");
+        }
+
+        startup.setCiclo("CICLO1");
+        return startupRepository.save(startup);
+    }
+
+    /**
      * Registra o relatório de uma startup como enviado.
      */
     public Startup registrarRelatorio(Long id) {
@@ -100,6 +133,17 @@ public class StartupService {
                 .orElseThrow(() -> new RuntimeException("Startup não encontrada"));
 
         startup.setRelatorioEnviado(true);
+        return startupRepository.save(startup);
+    }
+
+    /**
+     * Cancela o registro de contrato de uma startup.
+     */
+    public Startup cancelarContrato(Long id) {
+        Startup startup = startupRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Startup não encontrada"));
+
+        startup.setRelatorioEnviado(false);
         return startupRepository.save(startup);
     }
 }

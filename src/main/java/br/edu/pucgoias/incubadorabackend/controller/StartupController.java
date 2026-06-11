@@ -75,6 +75,15 @@ public class StartupController {
     }
 
     /**
+     * PATCH /api/startups/{id}/voltar
+     * Volta a startup para o ciclo anterior.
+     */
+    @PatchMapping("/{id}/voltar")
+    public ResponseEntity<Startup> voltarCiclo(@PathVariable Long id) {
+        return ResponseEntity.ok(startupService.voltarCiclo(id));
+    }
+
+    /**
      * PATCH /api/startups/{id}/desclassificar
      * Desclassifica uma startup.
      */
@@ -84,11 +93,29 @@ public class StartupController {
     }
 
     /**
+     * PATCH /api/startups/{id}/reativar
+     * Reativa uma startup desclassificada, voltando para o Ciclo 1.
+     */
+    @PatchMapping("/{id}/reativar")
+    public ResponseEntity<Startup> reativar(@PathVariable Long id) {
+        return ResponseEntity.ok(startupService.reativar(id));
+    }
+
+    /**
      * PATCH /api/startups/{id}/relatorio
      * Registra o relatório de uma startup como enviado.
      */
     @PatchMapping("/{id}/relatorio")
     public ResponseEntity<Startup> registrarRelatorio(@PathVariable Long id) {
         return ResponseEntity.ok(startupService.registrarRelatorio(id));
+    }
+
+    /**
+     * PATCH /api/startups/{id}/cancelar-contrato
+     * Cancela o registro de contrato de uma startup.
+     */
+    @PatchMapping("/{id}/cancelar-contrato")
+    public ResponseEntity<Startup> cancelarContrato(@PathVariable Long id) {
+        return ResponseEntity.ok(startupService.cancelarContrato(id));
     }
 }
