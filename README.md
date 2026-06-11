@@ -25,7 +25,7 @@ A divisão em camadas seguiu o padrão **MVC** com separação de responsabilida
 |--------|-----------|
 | `model/` | Define as entidades mapeadas para o banco de dados (`Startup`, `Usuario`). |
 | `repository/` | Interface de acesso ao banco. O Spring Data JPA fornece os métodos automaticamente. |
-| `service/` | Contém as regras de negócio. É aqui que ficam validações e lógica da aplicação. |
+| `service/` | Contém as regras de negócio. Validações e lógica da aplicação. |
 | `controller/` | Recebe as requisições HTTP e chama os services. Não contém lógica de negócio. |
 | `dto/` | Objetos de transferência de dados usados nas requisições e respostas da API. |
 | `security/` | Configuração do Spring Security, geração e validação do JWT, e filtro de autenticação. |
@@ -47,10 +47,6 @@ Front-end
 ### Por que JWT e não sessão?
 
 O front-end (React) e o back-end (Spring) rodam em servidores separados. O JWT permite que o back-end valide o usuário sem precisar guardar sessão no servidor — cada requisição carrega o token e o back-end verifica sua assinatura. Isso torna a API **stateless** e mais escalável.
-
-### Por que Spring Data JPA?
-
-Com o JPA, as tabelas do banco são criadas automaticamente a partir das entidades Java, sem precisar escrever SQL manualmente. O Hibernate gerencia o mapeamento objeto-relacional.
 
 ---
 
@@ -101,8 +97,11 @@ src/main/java/br/edu/pucgoias/incubadorabackend/
 | PUT | `/api/startups/{id}` | Atualiza dados de uma startup |
 | DELETE | `/api/startups/{id}` | Remove uma startup |
 | PATCH | `/api/startups/{id}/avancar` | Avança startup para o próximo ciclo |
+| PATCH | `/api/startups/{id}/voltar` | Volta startup para o ciclo anterior |
 | PATCH | `/api/startups/{id}/desclassificar` | Desclassifica uma startup |
-| PATCH | `/api/startups/{id}/relatorio` | Registra relatório como enviado |
+| PATCH | `/api/startups/{id}/reativar` | Reativa uma startup desclassificada |
+| PATCH | `/api/startups/{id}/relatorio` | Registra contrato como assinado |
+| PATCH | `/api/startups/{id}/cancelar-contrato` | Cancela o registro de contrato |
 
 ---
 
